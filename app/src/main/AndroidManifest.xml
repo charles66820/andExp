@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DisplayMessageActivity"
+        <activity
+            android:name=".DisplayMessageActivity"
             android:parentActivityName=".MainActivity">
 
             <!-- start endNotU : The meta-data tag is required if you support API level 15 and lower -->
@@ -24,6 +25,17 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="portfolio.magicorp.fr"
+                    android:pathPrefix="/project/andExp" />
             </intent-filter>
         </activity>
     </application>
