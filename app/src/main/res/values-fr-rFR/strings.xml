@@ -4,5 +4,6 @@
     <string name="edit_message">Enter un message</string>
     <string name="button_send">Envoyer</string>
     <string name="saved_nightMode">Mode sombre</string>
+    <string name="servers">Serveurs</string>
     <string name="loading_servers">Chargement des serveurs</string>
 </resources>
