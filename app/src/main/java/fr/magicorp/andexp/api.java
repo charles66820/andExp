@@ -2,6 +2,7 @@ package fr.magicorp.andexp;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.widget.ListAdapter;
@@ -46,6 +47,25 @@ public class api extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.list);
 
         new getServers().execute();
+
+        // refresh swipe
+        final SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // reset list
+                        serversList = new ArrayList<>();
+                        ListAdapter adapter = new SimpleAdapter(api.this, serversList,
+                                R.layout.list_item, new String[]{ "id","name", "status", "description"},
+                                new int[]{R.id.id, R.id.name, R.id.status, R.id.description});
+                        lv.setAdapter(adapter);
+
+                        new getServers().execute(); // reload list
+                        swipeRefresh.setRefreshing(false); // on data load close refresh swipe
+                    }
+                }
+        );
     }
 
     // get server async task
@@ -53,7 +73,7 @@ public class api extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(api.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+            Toast.makeText(api.this, R.string.loading_servers, Toast.LENGTH_LONG).show();
         }
 
         @Override
