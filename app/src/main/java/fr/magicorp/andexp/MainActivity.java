@@ -1,6 +1,8 @@
 package fr.magicorp.andexp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -17,6 +19,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);// load shared preference
+
+        // load night mode from sharePref
+        if (sharedPref.getBoolean(getString(R.string.saved_nightMode), false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         // theme
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             setTheme(R.style.DarkTheme);
@@ -34,14 +45,20 @@ public class MainActivity extends AppCompatActivity {
             nightModeS.setChecked(true);
         }
 
+        // prepare sharedPref editor
+        final SharedPreferences.Editor editor = sharedPref.edit();
+
         nightModeS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putBoolean(getString(R.string.saved_nightMode), true);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putBoolean(getString(R.string.saved_nightMode), false);
                 }
+                editor.apply();
                 recreate();
             }
         });
