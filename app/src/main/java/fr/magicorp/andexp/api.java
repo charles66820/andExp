@@ -62,7 +62,6 @@ public class api extends AppCompatActivity {
                         lv.setAdapter(adapter);
 
                         new getServers().execute(); // reload list
-                        swipeRefresh.setRefreshing(false); // on data load close refresh swipe
                     }
                 }
         );
@@ -124,7 +123,9 @@ public class api extends AppCompatActivity {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    throw new RuntimeException(error.toString());
+                    Toast.makeText(getApplicationContext(),
+                            "Http connexion error: " + error.getMessage(),
+                            Toast.LENGTH_LONG).show();
                 }
             });
             try {
@@ -138,6 +139,10 @@ public class api extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
+            // on data load close refresh swipe
+            final SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+            swipeRefresh.setRefreshing(false);
         }
     }
 }
